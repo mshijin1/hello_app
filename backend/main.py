@@ -15,7 +15,7 @@ app.add_middleware(
 
 @app.get("/api/greet")
 def get_greeting(name: str = "World"):
-    return {"message": f"Hello {name}"}
+    return {"message": f"Hello oye {name}"}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
