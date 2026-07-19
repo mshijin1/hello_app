@@ -1,0 +1,36 @@
+name: Production CI/CD Gatekeeper
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  quality-assurance-and-ship:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone Repository Source
+      uses: actions/checkout@v4
+
+    - name: Initialize Runtime Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Provision Production Dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Execute System Verification Automated Tests
+      run: |
+        cd backend
+        pytest
+
+    - name: Dispatch Deployment Order to Render Edge Nodes
+      if: success()
+      env:
+        DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      run: |
+        curl -X POST "$DEPLOY_URL"
