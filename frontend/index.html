@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Hello UI</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f6f9; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 200px; margin-right: 10px; }
+        button { padding: 10px 20px; border: none; background: #0070f3; color: white; border-radius: 4px; cursor: pointer; }
+        h2 { color: #333; margin-top: 20px; min-height: 30px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Production Demo Setup</h1>
+        <input type="text" id="nameInput" placeholder="Enter your designation...">
+        <button onclick="sendGreeting()">Execute</button>
+        <h2 id="greetingDisplay"></h2>
+    </div>
+
+    <script>
+        // Replace this string placeholder after deploying your Render Web Service backend
+        const BACKEND_URL = "YOUR_BACKEND_URL_HERE"; 
+
+        async function sendGreeting() {
+            const name = document.getElementById('nameInput').value || "World";
+            const display = document.getElementById('greetingDisplay');
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/greet?name=${encodeURIComponent(name)}`);
+                const data = await response.json();
+                display.innerText = data.message;
+            } catch (err) {
+                display.innerText = "Error contacting backend API node.";
+            }
+        }
+    </script>
+</body>
+</html>
